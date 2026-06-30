@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Login with FastAPI</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
     
-    <!-- Main Container -->
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
         
-        <!-- Logo / Brand -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-3">
                 <i class="fas fa-user-circle text-4xl text-blue-600"></i>
@@ -23,7 +19,6 @@
             <p class="text-gray-500 text-sm">ចូលគណនីរបស់អ្នក</p>
         </div>
 
-        <!-- User Info Section (Hidden by default) -->
         <div id="userInfo" class="hidden text-center mb-6">
             <div class="flex flex-col items-center">
                 <img id="userAvatar" src="" alt="Profile" 
@@ -33,7 +28,6 @@
             </div>
         </div>
 
-        <!-- Login Section -->
         <div id="loginSection">
             <button id="googleLoginBtn" 
                     class="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 hover:border-blue-400 text-gray-700 py-3 px-4 rounded-xl transition-all duration-200 hover:shadow-md group">
@@ -44,7 +38,6 @@
             <p class="text-xs text-gray-400 text-center mt-4">ដោយការចូល អ្នកយល់ព្រមនឹងលក្ខខណ្ឌប្រើប្រាស់</p>
         </div>
 
-        <!-- Logout Section (Hidden by default) -->
         <div id="logoutSection" class="hidden">
             <button id="logoutBtn" 
                     class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3 px-4 rounded-xl transition-all duration-200 font-medium flex items-center justify-center gap-2">
@@ -53,13 +46,11 @@
             </button>
         </div>
 
-        <!-- Loading Spinner -->
         <div id="loadingSpinner" class="hidden text-center py-4">
             <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
             <p class="text-sm text-gray-500 mt-2">កំពុងផ្ទុក...</p>
         </div>
 
-        <!-- Error Message -->
         <div id="errorMessage" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm text-center">
             <i class="fas fa-exclamation-circle mr-2"></i>
             <span id="errorText">មានបញ្ហាកើតឡើង</span>
@@ -67,12 +58,9 @@
 
     </div>
 
-    <!-- JavaScript -->
     <script>
-        // State management
         let currentUser = null;
 
-        // DOM elements
         const loginSection = document.getElementById('loginSection');
         const logoutSection = document.getElementById('logoutSection');
         const userInfo = document.getElementById('userInfo');
@@ -84,7 +72,6 @@
         const userEmail = document.getElementById('userEmail');
         const userAvatar = document.getElementById('userAvatar');
 
-        // Check if user is already logged in on page load
         async function checkUserStatus() {
             showLoading(true);
             try {
@@ -106,7 +93,6 @@
             }
         }
 
-        // Show logged in state
         function showLoggedInState(user) {
             loginSection.classList.add('hidden');
             userInfo.classList.remove('hidden');
@@ -117,7 +103,6 @@
             userAvatar.src = user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U') + '&background=random';
         }
 
-        // Show logged out state
         function showLoggedOutState() {
             loginSection.classList.remove('hidden');
             userInfo.classList.add('hidden');
@@ -125,7 +110,6 @@
             currentUser = null;
         }
 
-        // Show/hide loading spinner
         function showLoading(show) {
             if (show) {
                 loadingSpinner.classList.remove('hidden');
@@ -134,7 +118,6 @@
             }
         }
 
-        // Show error message
         function showError(message) {
             errorText.textContent = message;
             errorMessage.classList.remove('hidden');
@@ -143,12 +126,10 @@
             }, 5000);
         }
 
-        // Google Login button click
         document.getElementById('googleLoginBtn').addEventListener('click', () => {
             window.location.href = '/auth/login';
         });
 
-        // Logout button click
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             showLoading(true);
             try {
@@ -166,10 +147,8 @@
             }
         });
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', checkUserStatus);
 
-        // Handle URL parameters (for error messages)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('error') === 'authentication_failed') {
             showError('ការផ្ទៀងផ្ទាត់បរាជ័យ។ សូមព្យាយាមម្តងទៀត');
