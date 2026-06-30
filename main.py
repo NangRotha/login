@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware  # សំខាន់!
+from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth
 from dotenv import load_dotenv
 
@@ -15,17 +15,17 @@ app = FastAPI()
 # បន្ថែម SessionMiddleware (ចាំបាច់សម្រាប់ Google Login)
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY", "your-fallback-secret-key"))
 
-# បន្ថែម CORS (សម្រាប់ការពារកំហុសឆ្លងដែន បើចាំបាច់)
+# បន្ថែម CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # ឬអ្នកអាចដាក់ URL របស់ Frontend ជាក់លាក់
+    allow_origins=["*"],  # អនុញ្ញាតឱ្យអ្នកណាក៏អាចចូលប្រើបានដែរ
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# កំណត់ Templates
-templates = Jinja2Templates(directory="templates")
+# កំណត់ Templates (កែដោយប្រើ os.path ដើម្បីកុំឱ្យមានបញ្ហា Path នៅលើ Render)
+templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
 
 # កំណត់ OAuth
 oauth = OAuth()
@@ -39,7 +39,7 @@ oauth.register(
     }
 )
 
-# ផ្ទុកអ្នកប្រើប្រាស់ក្នុងមេម៉ូរី (ក្នុង Production គួរប្រើ Database)
+# ផ្ទុកអ្នកប្រើប្រាស់ក្នុងមេម៉ូរី
 users_db = {}
 
 @app.get("/", response_class=HTMLResponse)
